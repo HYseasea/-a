@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>轮播图</title>
+    <style>
+      *{
+          box-sizing: border-box;
+      }
+      html,body{
+          margin: 0;
+          padding: 0;
+          height: 100%;
+      }
+      main{
+          width: 500px;
+          height: 200px;
+          position: relative;
+          margin: 50px auto;
+          overflow: hidden;
+      }
+      main .imgList{
+          width: 3500px;
+          height: 200px;
+          position: absolute;
+          top: 0;
+          left: 0;
+      }
+      .imgList img{
+          width: 500px;
+          height: 200px;
+          position: absolute;
+          top: 0;
+          left: 0;
+      }
+    </style>
+</head>
+<body>
+    <main>
+        <div class="imgList">
+             <img src="./img/5.jpg" alt="">
+             <img src="./img/1.jpg" alt="">
+             <img src="./img/2.jpg" alt="">
+             <img src="./img/3.jpg" alt="">
+             <img src="./img/4.jpg" alt="">
+             <img src="./img/5.jpg" alt="">
+             <img src="./img/1.jpg" alt="">
+        </div>
+    </main>
+    <script>
+       var imgList = document.querySelector('.imgList');
+       var imgs = document.querySelectorAll('img');
+
+    //    设置每张图片的位置
+    for (var i = 0; i < imgs.length; i++) {
+        imgs[i].style.left=i*500+'px';
+        
+    }
+    //  设置显示第一张图片
+    imgList.style.left='-500px';
+      
+    //   计时器
+      var time = 0;
+    
+
+    function nextPage(){
+        animate(500);
+    }
+   
+function autoPlay(){
+    timer = setInterval(nextPage,2000);
+}
+autoPlay();
+
+    function  animate(offset){
+        // 计算出新的left
+        var newLeft = imgList.offsetLeft + offset;
+        move(imgList,newLeft,20);
+    }
+
+    // 图片移动
+    function move(element,finalLeft,interval) {
+        var dirX  = element.offsetLeft;
+        // 每次调用此函数的时候，图片移动的位置距离
+        var dist = 20;
+       
+    //    设置轮播方式回滚
+    //  图片往左边移动
+        if(dirX<=-3000){
+            element.style.left='-500px';
+        }
+        // 设置图片往右移动
+        if(dirX>=0){
+            element.style.left='-2500px';
+        }
+        if(dirX == finalLeft){
+            return;
+        }
+
+        // 计算每次移动的距离
+       dirX = dirX > finalLeft? dirX - dist:dirX + dist;
+        
+        element.style.left=dirX+'px';
+        if(element.movement){
+            clearTimeout(element.movement);
+        }
+     
+        //  每过20ms 重新调用move函数，进行图片位置的偏移
+            element.movement = setTimeout(function() {
+                move(element,finalLeft,interval);
+            }, interval);
+
+
+        
+    }
+       
+    </script>
+</body>
+</html>
